@@ -47,8 +47,8 @@
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-    // Moved camera slightly further back (4.2 instead of 3.5) to fit the whole model
-    camera.position.set(0, 0, 4.2);
+    // Pulled camera back slightly more to fit the entire model comfortably
+    camera.position.set(0, 0, 4.6);
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -68,7 +68,7 @@
     let initialY = 0;
     const loader = new GLTFLoader();
 
-    // Replace 'model.glb' with your exact filename if different (case-sensitive!)
+    // Make sure 'model.glb' matches your exact filename (case-sensitive)
     loader.load('jojolowpoly.glb', function (gltf) {
       model = gltf.scene;
 
@@ -77,8 +77,8 @@
       const center = box.getCenter(new THREE.Vector3());
       model.position.sub(center);
 
-      // Shift model down slightly so the head isn't clipped at the top
-      model.position.y -= 0.35;
+      // Shift model further down so the head clears the top of the frame
+      model.position.y -= 0.55;
 
       // Save initial vertical position for hover animation
       initialY = model.position.y;
