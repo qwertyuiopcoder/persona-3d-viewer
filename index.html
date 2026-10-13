@@ -24,15 +24,26 @@
       display: block;
     }
   </style>
-<!-- Load Three.js, GLTFLoader, and OrbitControls -->
-<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-<script src="https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
-<script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Import Map defines modern Three.js modules -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 <body>
   <div id="canvas-container"></div>
 
-  <script>
+  <!-- ES Module Script -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
     // 1. Scene, Camera, and Renderer Setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -53,13 +64,13 @@
 
     // 3. Load GLTF / GLB Model
     let model;
-    const loader = new THREE.GLTFLoader();
+    const loader = new GLTFLoader();
     
-    // Replace 'model.glb' with your exact file name if different
+    // REPLACE 'model.glb' WITH YOUR EXACT MODEL FILENAME IF DIFFERENT (case-sensitive!)
     loader.load('jojolowpoly.glb', function (gltf) {
       model = gltf.scene;
 
-      // Auto-center model geometry
+      // Auto-center geometry
       const box = new THREE.Box3().setFromObject(model);
       const center = box.getCenter(new THREE.Vector3());
       model.position.sub(center);
@@ -70,10 +81,10 @@
     });
 
     // 4. Orbit Controls (Interactive Rotation)
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.enableZoom = false; // Disable zoom to maintain layout scaling
+    controls.enableZoom = false; // Disable zoom to preserve layout frame
 
     // 5. Responsive Resize Handling
     window.addEventListener('resize', () => {
@@ -86,7 +97,7 @@
     function animate() {
       requestAnimationFrame(animate);
       
-      // Slow continuous rotation
+      // Continuous slow rotation
       if (model) {
         model.rotation.y += 0.005;
       }
